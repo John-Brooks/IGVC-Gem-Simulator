@@ -9,7 +9,7 @@ https://www.libsdl.org/download-2.0.php
 2) "Install" SDL2 by dropping the 64-bit dll SDL2.dll in C:\Windows\System32
 3) Open the cloned repository folder from VS2019 (File-->Open-->CMake...)
 
-### Linux:
+### Linux (not yet tested):
 Typical CMake build steps. From the cloned repo directory...
 1) `mkdir build`
 2) `cd build`
