@@ -7,6 +7,7 @@ IGVC-Gem-Simulator is a lightweight simulation of basic vehicle dynamics and IGV
 1) Download the 64-bit SDL2 development library and extract it to C:\SDL2 
 https://www.libsdl.org/download-2.0.php
 2) "Install" SDL2 by dropping the 64-bit dll SDL2.dll in C:\Windows\System32
+3) Open the cloned repository folder from VS2019 (File-->Open-->CMake...)
 
 ### Linux:
 Typical CMake build steps. From the cloned repo directory...
