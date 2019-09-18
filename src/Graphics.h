@@ -1,16 +1,23 @@
 #pragma once
 #include "SDL.h"
-#include "drawable.h"
+#include "Drawable.h"
+#include <vector>
 
 class Graphics {
     public:
-        void SetWindowSize(int width, int height);
-        void SetDrawables(const std::vector< Drawable > drawables );
+		void SetWindowSize(const int& width, const int& height) { mWindowWidth = width; mWindowHeight = height; }
+        //void SetDrawables(const std::vector< Drawable > drawables );
+		bool Init();
+		void Close();
         bool Render();
 
 
     private:
+		SDL_Window* gWindow = NULL;
+		SDL_Surface* gScreenSurface = NULL;
 
+		int mWindowWidth;
+		int mWindowHeight;
 
 
 };

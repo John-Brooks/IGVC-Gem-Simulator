@@ -1,6 +1,6 @@
-#include collision.h
+#include "Collision.h"
 
-void Collision::Collision()
+Collision::Collision()
 {
     
 }

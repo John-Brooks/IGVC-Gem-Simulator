@@ -6,18 +6,18 @@
 //The collision class tracks objects like the vehicle (a rectangle, or perhaps a collection of rectangles / lines)
 //and any other lines
 
-class Collision 
+class Collision
 {
-    public:
-        void Collision();
+public:
+	Collision();
 
-        void AddObject(int& object_id, const Object& object);
-        bool DeleteObject(const int& object_id);
+	void AddObject(int& object_id, const Object& object);
+	bool DeleteObject(const int& object_id);
 
-        std::vector< int > GetObjectCollisions();
+	std::vector< int > GetObjectCollisions();
 
-    private:
-        int mLastObjectID;
-        std::map< int, Object > mObjects;
-        
-}
+private:
+	int mLastObjectID;
+	std::map< int, Object > mObjects;
+
+};

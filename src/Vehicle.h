@@ -1,9 +1,9 @@
 #pragma once
-
+#include "Geometry.h"
 
 class Vehicle {
 public:
-	
+	Vehicle();
 	void Start(const unsigned long long& current_time_ms);
 	void DynamicsUpdate(const unsigned long long& current_time_ms);
 	void SetPose(const Pose& new_pose) { mPose = new_pose; }
@@ -41,7 +41,5 @@ protected:
 	//Misc
 	bool mSafetyLightsOn;
 	bool mSafetyLightFlash;
-
-	void UpdateYawRate();
 
 };
