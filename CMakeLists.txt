@@ -17,6 +17,7 @@ add_executable( igvc-simulator
 	src/Vehicle.cpp
 	src/Collision.cpp
 	src/Graphics.cpp
+	src/Environment.cpp
 )
 
 target_link_libraries( igvc-simulator ${SDL2_LIBRARY})

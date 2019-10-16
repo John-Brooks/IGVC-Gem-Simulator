@@ -5,6 +5,23 @@
 Vehicle::Vehicle()
 {
 	mLastUpdateTimeMs = 0;
+
+	mMinimumSteeringAngle = 0;
+	mMaximumSteeringAngle = 0;
+	mCurrentSteeringAngle = 0;
+	mYawRate = 0;
+	mWheelbase = 0;
+
+	mMaximumAccel = 0;
+	mMinimumAccel = 0;
+	mCurrentAccelRequested = 0;
+	mMaximumSpeed = 0;
+	mCurrentSpeed = 0;
+	mBrakeApplied = false;
+	mReverse = false;
+
+	mSafetyLightsOn = false;
+	mSafetyLightFlash = false;
 }
 
 void Vehicle::SetSteeringAngle(const double& new_angle)

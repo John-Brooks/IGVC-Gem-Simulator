@@ -1,5 +1,6 @@
 #pragma once
 #include "Geometry.h"
+#include "DrawableObject.h"
 
 class Vehicle {
 public:
@@ -14,6 +15,8 @@ public:
 
 	double GetCurrentSpeed() { return mCurrentSpeed; }
 	double GetCurrentSteeringAngle() { return mCurrentSteeringAngle; }
+
+	DrawableObject* GetDrawable() { return &mDrawableObject; }
 
 protected:
 	//Simulation
@@ -41,5 +44,6 @@ protected:
 	//Misc
 	bool mSafetyLightsOn;
 	bool mSafetyLightFlash;
+	Rect mVehicleRect;
 
 };
