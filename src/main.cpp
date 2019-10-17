@@ -11,9 +11,11 @@ int main(int argc, char** argv)
 	Environment env;
 
 	env.Init();
-	env.Render();
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+	while(true)
+	{
+		env.Render();
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));
+	}
 	graphics.Close();
 	return 0;
 }

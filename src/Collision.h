@@ -11,13 +11,13 @@ class Collision
 public:
 	Collision();
 
-	void AddObject(int& object_id, const Object& object);
+	void AddObject(int& object_id, const DrawableObject& object);
 	bool DeleteObject(const int& object_id);
 
 	std::vector< int > GetObjectCollisions();
 
 private:
 	int mLastObjectID;
-	std::map< int, Object > mObjects;
+	std::map< int, DrawableObject > mObjects;
 
 };

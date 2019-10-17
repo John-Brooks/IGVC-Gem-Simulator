@@ -11,6 +11,8 @@ Vehicle::Vehicle()
 	mCurrentSteeringAngle = 0;
 	mYawRate = 0;
 	mWheelbase = 0;
+	mWidth = 1;
+	mLength = 2;
 
 	mMaximumAccel = 0;
 	mMinimumAccel = 0;
@@ -22,6 +24,12 @@ Vehicle::Vehicle()
 
 	mSafetyLightsOn = false;
 	mSafetyLightFlash = false;
+
+	mVehicleDrawable = DrawableObject(Rect(Point(mWidth / -2.0, mLength / 2.0), Point(mWidth / 2.0, mLength / -2.0)));
+	mVehicleDrawable.mColor.r = 255;
+	mVehicleDrawable.mColor.g = 0;
+	mVehicleDrawable.mColor.b = 0;
+
 }
 
 void Vehicle::SetSteeringAngle(const double& new_angle)

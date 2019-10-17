@@ -1,13 +1,13 @@
 #pragma once
 #include "Geometry.h"
-#include "DrawableObject.h"
 
 class Vehicle {
 public:
 	Vehicle();
 	void Start(const unsigned long long& current_time_ms);
 	void DynamicsUpdate(const unsigned long long& current_time_ms);
-	void SetPose(const Pose& new_pose) { mPose = new_pose; }
+	void SetPose(const Pose& new_pose) { mPose = new_pose; mVehicleDrawable.mPose = new_pose; }
+	Pose GetPose() { return mPose; }
 	void SetBrake(const bool& brake_on) { mBrakeApplied = brake_on; }
 	void SetAccelRequested(const double& new_accel);
 	void SetSafetyLightsOn(const bool& lights_on) { mSafetyLightsOn = lights_on; }
@@ -16,7 +16,7 @@ public:
 	double GetCurrentSpeed() { return mCurrentSpeed; }
 	double GetCurrentSteeringAngle() { return mCurrentSteeringAngle; }
 
-	DrawableObject* GetDrawable() { return &mDrawableObject; }
+	DrawableObject* GetVehicleDrawable() { return &mVehicleDrawable; }
 
 protected:
 	//Simulation
@@ -24,6 +24,8 @@ protected:
 
 	//Positioning
 	Pose mPose;
+	double mWidth;
+	double mLength;
 
 	//Steering
 	double mMinimumSteeringAngle;
@@ -44,6 +46,6 @@ protected:
 	//Misc
 	bool mSafetyLightsOn;
 	bool mSafetyLightFlash;
-	Rect mVehicleRect;
+	DrawableObject mVehicleDrawable;
 
 };

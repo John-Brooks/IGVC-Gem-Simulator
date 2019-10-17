@@ -1,55 +1,73 @@
 #pragma once
 #include <vector>
 
-class Point {
-public:
+struct Point {
 	double x, y;
 	Point(double x, double y) : x(x), y(y) {}
 	Point() : x(0), y(0) {}
 };
-class Line{
-public:
+struct Line{
 	Point p1, p2;
 	Line(Point p1, Point p2) : p1(p1), p2(p2) {}
 	Line(){}
 };
-class Circle
+struct Circle
 {
-public:
 	double x, y, r;
+};
+struct Rect {
+	Rect(const Point& top_left_in, const Point& bottom_right_in) :	top_left(top_left_in), 
+																	bottom_right(bottom_right_in),
+																	top_right(bottom_right.x, top_left.y),
+																	bottom_left(top_left.x, bottom_right.y) {}
+	Point top_left;
+	Point bottom_right;
+	Point top_right;
+	Point bottom_left;
 };
 struct Pose
 {
+	Pose() : pos(0,0), angle(0) {}
 	Point pos;
 	double angle;
 };
-class Object
+
+class DrawableObject
 {
 public:
-	std::vector< Line > lines;
-	std::vector< Circle > circles;
-	Object() = default;
-	Object(const Line& line)
+	DrawableObject()
 	{
-		lines.push_back(line);
+		mPixelCoordinates = false;
 	}
-	Object(const Circle& circle)
+	DrawableObject(const Line& line)
 	{
-		circles.push_back(circle);
+		mLines.push_back(line);
+		mPixelCoordinates = false;
 	}
-};
-class Rect : public Object {
-public:
-	Rect(const Point& top_left, const Point& bottom_right)
+	DrawableObject(const Circle& circle)
 	{
-		Point top_right = Point(bottom_right.x, top_left.y);
-		Point bottom_left = Point(top_left.x, bottom_right.y);
+		mCircles.push_back(circle);
+		mPixelCoordinates = false;
+	}
+	DrawableObject(const Rect& rect)
+	{
+		mLines.push_back(Line(rect.top_left, rect.top_right)); //top
+		mLines.push_back(Line(rect.top_right, rect.bottom_right)); //right
+		mLines.push_back(Line(rect.bottom_right, rect.bottom_left)); //bottom
+		mLines.push_back(Line(rect.bottom_left, rect.top_left)); //left
+		mPixelCoordinates = false;
+	}
+	std::vector< Line > mLines;
+	std::vector< Circle > mCircles;
 
-		lines.push_back(Line(top_left, top_right)); //top
-		lines.push_back(Line(top_right, bottom_right)); //right
-		lines.push_back(Line(bottom_right, bottom_left)); //bottom
-		lines.push_back(Line(bottom_left, top_left)); //left
-	}
+	struct Color
+	{
+		Color() : r(255), g(255), b(255), a(255) {}
+		int r, g, b, a;
+
+	} mColor;
+
+	bool mPixelCoordinates;
 	Pose mPose;
 };
 

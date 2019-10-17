@@ -17,9 +17,13 @@ class Graphics {
 		void AddDrawableObject(const DrawableObject* obj);
 		void RemoveDrawableObject(const DrawableObject* obj);
 		void ClearDrawableObjects();
+		
+		void SetEnvironmentWidth(const double& new_width) { mEnvironmentWidth = new_width; }
+		void SetEnvironmentHeight(const double& new_height) { mEnvironmentHeight = new_height; }
 
     private:
-		Point ConvertToScreenCoordinate(const Point& point);
+		void ConvertToScreenCoordinate(Line& line);
+		void ApplyObjectPose(Line& line, const Pose& pose);
 
 		SDL_Window* mWindow = NULL;
 		SDL_Renderer* mRenderer = NULL;
@@ -31,7 +35,7 @@ class Graphics {
 		int mWindowHeight;
 
 		double mEnvironmentWidth;
-		double mEnvironmentHight;
+		double mEnvironmentHeight;
 
 
 };

@@ -1,8 +1,8 @@
 #include "Graphics.h"
 #include "SDL.h"
-#include "DrawableObject.h"
 #include <stdio.h>
 #include <algorithm>
+#include <cmath>
 
 bool Graphics::Init()
 {
@@ -48,14 +48,25 @@ void Graphics::Close()
 }
 bool Graphics::Render()
 {
-	Point p1, p2; 
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+	SDL_RenderClear(mRenderer);
+
+	Line render_line;
 	for (auto& drawable : mDrawables)
 	{
-		for( auto& line : drawable->lines)
+		SDL_SetRenderDrawColor(mRenderer, drawable->mColor.r, drawable->mColor.g, drawable->mColor.b, drawable->mColor.a);
+		for( auto& line : drawable->mLines)
 		{ 
-			p1 = ConvertToScreenCoordinate(line.p1);
-			p2 = ConvertToScreenCoordinate(line.p2);
-			SDL_RenderDrawLine(mRenderer, p1.x, p1.y, p2.x, p2.y);
+			if ( drawable->mPixelCoordinates )
+			{
+				SDL_RenderDrawLine(mRenderer, line.p1.x, line.p1.y, line.p2.x, line.p2.y);
+				continue;
+			}
+			render_line = line;
+			ApplyObjectPose(render_line, drawable->mPose);
+			ConvertToScreenCoordinate(render_line);
+			
+			SDL_RenderDrawLine(mRenderer, render_line.p1.x, render_line.p1.y, render_line.p2.x, render_line.p2.y);
 		}
 	}
 	SDL_RenderPresent(mRenderer);
@@ -79,7 +90,51 @@ void Graphics::ClearDrawableObjects()
 	mDrawables.clear();
 }
 
-Point Graphics::ConvertToScreenCoordinate(const Point& point)
+void Graphics::ConvertToScreenCoordinate(Line& line)
 {
-	return Point(point.x / mEnvironmentWidth, point.y / mEnvironmentHight);
+	line.p1.x *= mWindowWidth / mEnvironmentWidth;
+	line.p2.x *= mWindowWidth / mEnvironmentWidth; 
+	line.p1.y *= mWindowHeight / mEnvironmentHeight;
+	line.p2.y *= mWindowHeight / mEnvironmentHeight;
+}
+
+void ApplyObjectAngleToPoint(Point& point, const Pose& pose)
+{
+	double r, theta;
+
+	r = sqrt(pow(point.y, 2) + pow(point.x, 2));
+
+	if (point.x == 0.0)
+	{
+		if( point.y >= 0.0)
+			theta = 1.5708;// pi * 1/2
+		else
+			theta = 4.7124;// pi * 3/2 
+	}
+	else
+	{
+		theta = atan(point.y / point.x);
+		if ((point.x < 0 && point.y > 0) || (point.x < 0 && point.y < 0)) //quadrant 2 || 3
+		{
+			theta += 3.1459;
+		}
+	}
+
+	theta += pose.angle;
+	point.x = r * cos(theta);
+	point.y = r * sin(theta);
+}
+
+void Graphics::ApplyObjectPose(Line& line, const Pose& pose)
+{
+	if (pose.angle != 0.0)
+	{
+		ApplyObjectAngleToPoint(line.p1, pose);
+		ApplyObjectAngleToPoint(line.p2, pose);
+	}
+
+	line.p1.x += pose.pos.x;
+	line.p1.y += pose.pos.y;
+	line.p2.x += pose.pos.x;
+	line.p2.y += pose.pos.y;
 }
