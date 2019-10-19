@@ -4,7 +4,7 @@ IGVC-Gem-Simulator is a lightweight simulation of basic vehicle dynamics and IGV
 
 ## Build Instructions
 
-The simulator is dependent on tinyxml2.0 for loading .svg files. After cloning do not forget to run...
+The simulator is dependent on tinyxml2.0 for loading .svg format "scenario" files. After cloning do not forget to run...
 ```
 git submodule init
 git submodule update
