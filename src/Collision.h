@@ -12,7 +12,7 @@ public:
 	Collision();
 
 	void AddObject(int& object_id, const DrawableObject& object);
-	bool DeleteObject(const int& object_id);
+	bool DeleteObject(int object_id);
 
 	std::vector< int > GetObjectCollisions();
 

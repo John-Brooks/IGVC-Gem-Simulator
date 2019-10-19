@@ -104,22 +104,7 @@ void ApplyObjectAngleToPoint(Point& point, const Pose& pose)
 
 	r = sqrt(pow(point.y, 2) + pow(point.x, 2));
 
-	if (point.x == 0.0)
-	{
-		if( point.y >= 0.0)
-			theta = 1.5708;// pi * 1/2
-		else
-			theta = 4.7124;// pi * 3/2 
-	}
-	else
-	{
-		theta = atan(point.y / point.x);
-		if ((point.x < 0 && point.y > 0) || (point.x < 0 && point.y < 0)) //quadrant 2 || 3
-		{
-			theta += 3.1459;
-		}
-	}
-
+	theta = CalculatePointAngle(point);
 	theta += pose.angle;
 	point.x = r * cos(theta);
 	point.y = r * sin(theta);

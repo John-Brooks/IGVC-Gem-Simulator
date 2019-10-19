@@ -1,6 +1,10 @@
 #pragma once
 #include <vector>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846  /* pi */
+#endif
+
 struct Point {
 	double x, y;
 	Point(double x, double y) : x(x), y(y) {}
@@ -70,6 +74,27 @@ public:
 	bool mPixelCoordinates;
 	Pose mPose;
 };
+
+static double CalculatePointAngle(const Point& point)
+{
+	double theta;
+	if (point.x == 0.0)
+	{
+		if (point.y >= 0.0)
+			theta = M_PI / 2.0;
+		else
+			theta = M_PI * 3 / 2;
+	}
+	else
+	{
+		theta = atan(point.y / point.x);
+		if ((point.x < 0 && point.y > 0) || (point.x < 0 && point.y < 0)) //quadrant 2 || 3
+		{
+			theta += M_PI;
+		}
+	}
+	return theta;
+}
 
 
 

@@ -9,7 +9,7 @@ class Rect;
 
 class Graphics {
     public:
-		void SetWindowSize(const int& width, const int& height) { mWindowWidth = width; mWindowHeight = height; }
+		void SetWindowSize(int width, int height) { mWindowWidth = width; mWindowHeight = height; }
 		bool Init();
 		void Close();
         bool Render();
@@ -18,8 +18,8 @@ class Graphics {
 		void RemoveDrawableObject(const DrawableObject* obj);
 		void ClearDrawableObjects();
 		
-		void SetEnvironmentWidth(const double& new_width) { mEnvironmentWidth = new_width; }
-		void SetEnvironmentHeight(const double& new_height) { mEnvironmentHeight = new_height; }
+		void SetEnvironmentWidth(double new_width) { mEnvironmentWidth = new_width; }
+		void SetEnvironmentHeight(double new_height) { mEnvironmentHeight = new_height; }
 
     private:
 		void ConvertToScreenCoordinate(Line& line);

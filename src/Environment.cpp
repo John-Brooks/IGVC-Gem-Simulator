@@ -20,8 +20,20 @@ void Environment::Init()
 
 void Environment::Render()
 {
-	Pose pose = mVehicle.GetPose();
-	pose.angle += 0.01;
-	mVehicle.SetPose(pose);
+	//Pose pose = mVehicle.GetPose();
+	//pose.angle += 0.01;
+	//mVehicle.SetPose(pose);
 	mGraphics.Render();
+}
+
+StateSpace Environment::Step(const ActionSpace& action)
+{
+	StateSpace state;
+	mVehicle.SetCurrentSpeed(action.VehicleSpeed);
+	mVehicle.SetSteeringAngle(action.SteeringAngle);
+	mVehicle.DynamicsUpdate(mSimulationTimeStep);
+
+	state.SteeringAngle = mVehicle.GetCurrentSteeringAngle();
+	state.VehicleSpeed = mVehicle.GetCurrentSpeed();
+	return state;
 }

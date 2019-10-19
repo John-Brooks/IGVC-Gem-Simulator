@@ -4,16 +4,17 @@
 class Vehicle {
 public:
 	Vehicle();
-	void Start(const unsigned long long& current_time_ms);
-	void DynamicsUpdate(const unsigned long long& current_time_ms);
+	void Start();
+	void DynamicsUpdate(double delta_t);
 	void SetPose(const Pose& new_pose) { mPose = new_pose; mVehicleDrawable.mPose = new_pose; }
 	Pose GetPose() { return mPose; }
-	void SetBrake(const bool& brake_on) { mBrakeApplied = brake_on; }
-	void SetAccelRequested(const double& new_accel);
-	void SetSafetyLightsOn(const bool& lights_on) { mSafetyLightsOn = lights_on; }
-	void SetSteeringAngle(const double& new_angle);
+	void SetBrake(bool brake_on) { mBrakeApplied = brake_on; }
+	void SetAccelRequested(double new_accel);
+	void SetSafetyLightsOn(bool lights_on) { mSafetyLightsOn = lights_on; }
+	void SetSteeringAngle(double new_angle);
 
 	double GetCurrentSpeed() { return mCurrentSpeed; }
+	void SetCurrentSpeed(const double& new_speed) { mCurrentSpeed = new_speed; }
 	double GetCurrentSteeringAngle() { return mCurrentSteeringAngle; }
 
 	DrawableObject* GetVehicleDrawable() { return &mVehicleDrawable; }
