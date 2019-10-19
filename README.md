@@ -3,6 +3,9 @@
 IGVC-Gem-Simulator is a lightweight simulation of basic vehicle dynamics and IGVC Self Drive competition scenarios. The primary motivation in creating this software is to facilitate training of a reinforcement agent which can perform the tasks of a driving agent in the competition. However, it could also be used to test a traditional driving agent algorithm. 
 
 ## Build Instructions
+
+The simulator is dependent on tinyxml2.0 for loading .svg files. After cloning do not forget to run `git submodule init` `git submodule update`
+
 ### Windows:
 1) Download the 64-bit SDL2 development library and extract it to C:\SDL2 
 https://www.libsdl.org/download-2.0.php
