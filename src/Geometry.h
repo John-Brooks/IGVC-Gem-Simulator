@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <stdint.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846  /* pi */
@@ -24,6 +25,15 @@ struct Rect {
 																	bottom_right(bottom_right_in),
 																	top_right(bottom_right.x, top_left.y),
 																	bottom_left(top_left.x, bottom_right.y) {}
+
+	void SetPoints(const Point& top_left_in, const Point& bottom_right_in)
+	{
+		top_left = top_left_in;
+		bottom_right = bottom_right_in;
+		top_right = Point(bottom_right.x, top_left.y);
+		bottom_left = Point(top_left.x, bottom_right.y);
+	}
+
 	Point top_left;
 	Point bottom_right;
 	Point top_right;
@@ -67,7 +77,7 @@ public:
 	struct Color
 	{
 		Color() : r(255), g(255), b(255), a(255) {}
-		int r, g, b, a;
+		uint8_t r, g, b, a;
 
 	} mColor;
 

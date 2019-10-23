@@ -1,21 +1,36 @@
 #include "Environment.h"
+#include "Scenario.h"
 
 
-void Environment::Init()
+void Environment::Init(Scenario* scenario)
 {
+	mScenario = scenario;
 	Pose vehicle_pose;
-	vehicle_pose.pos.x = 5;
-	vehicle_pose.pos.y = 5;
-	vehicle_pose.angle = 0;
-
+	vehicle_pose = scenario->mStartingLocation;
 	mVehicle.SetPose(vehicle_pose);
+	
+	
+	if (mScenario->mWidth / mScenario->mHeight > 1920.0 / 1080.0)
+	{
+		//Wider than 1920x1080
+		mGraphics.SetEnvironmentHeight(mScenario->mWidth * (1080.0 / 1920.0));
+		mGraphics.SetEnvironmentWidth(mScenario->mWidth);
+	}
+	else
+	{
+		mGraphics.SetEnvironmentHeight(mScenario->mHeight);
+		mGraphics.SetEnvironmentWidth(mScenario->mHeight * (1920.0 / 1080.0));
+	}
 
-	mGraphics.SetEnvironmentWidth(20.0);
-	mGraphics.SetEnvironmentHeight(20.0 * (480.0 /640.0));
-	mGraphics.SetWindowSize(640, 480);
+	mGraphics.SetWindowSize(1920, 1080);
 	mGraphics.Init();
 
 	mGraphics.AddDrawableObject(mVehicle.GetVehicleDrawable());
+
+	for (auto& drawable : mScenario->mBoundaries)
+	{
+		mGraphics.AddDrawableObject(&drawable);
+	}
 }
 
 void Environment::Render()

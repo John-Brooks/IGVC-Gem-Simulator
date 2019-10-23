@@ -27,9 +27,6 @@ Vehicle::Vehicle()
 	mSafetyLightFlash = false;
 
 	mVehicleDrawable = DrawableObject(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
-	mVehicleDrawable.mColor.r = 255;
-	mVehicleDrawable.mColor.g = 0;
-	mVehicleDrawable.mColor.b = 0;
 
 }
 
@@ -46,22 +43,42 @@ void Vehicle::SetSteeringAngle(double new_angle)
 
 void Vehicle::DynamicsUpdate(double delta_t)
 {
-	double steer_right_negate = mCurrentSteeringAngle > 0 ? 1 : -1;
+	double average_speed = (mCurrentAccelRequested / 2) * delta_t + mCurrentSpeed;
+
+	//within 1 degree use straight line calculation
+	if (mCurrentSteeringAngle < 0.005 && mCurrentSteeringAngle > -0.005)
+	{
+		double s = average_speed * delta_t;
+		mPose.pos.x += s * cos(mPose.angle);
+		mPose.pos.y += s * sin(mPose.angle);
+
+		mVehicleDrawable.mPose = mPose;
+		mCurrentSpeed += mCurrentAccelRequested * delta_t;
+		return;
+	}
+	
+	bool steering_right = mCurrentSteeringAngle < 0;
+	double steer_right_negate = steering_right ? -1.0 : 1.0;
 
 	//approximating based on constant acceleration (shouldn't need to integrate for small time steps)
-	double average_speed = (mCurrentAccelRequested / 2) * delta_t + mCurrentSpeed;
 	
-	double turning_radius = mWheelbase / tan(mCurrentSteeringAngle);
+	
+	double turning_radius = abs(mWheelbase / tan(mCurrentSteeringAngle));
 	mYawRate = (average_speed / turning_radius) * steer_right_negate; //radians / second (steering left increases vehicle angle.
 
+	double theta_s;
+	if (steering_right)
+		theta_s = mPose.angle - (M_PI / 2.0);
+	else
+		theta_s = mPose.angle + (M_PI / 2.0);
+
 	Point str_circle_center;
-	str_circle_center.x = turning_radius * sin(mPose.angle) * steer_right_negate * -1;
-	str_circle_center.y = turning_radius * cos(mPose.angle) * steer_right_negate;
-	str_circle_center.x += mPose.pos.x;
+	str_circle_center.x = mPose.pos.x;
+	str_circle_center.x += turning_radius * cos(theta_s);
 	str_circle_center.y += mPose.pos.y;
+	str_circle_center.y += turning_radius * sin(theta_s);
 
 	Point veh_coord_relative_to_circle_center(mPose.pos.x - str_circle_center.x, mPose.pos.y - str_circle_center.y);
-
 
 	double turn_circ_current_theta = CalculatePointAngle(veh_coord_relative_to_circle_center);
 	double turn_circ_new_theta = turn_circ_current_theta + (mYawRate * delta_t);
@@ -69,6 +86,8 @@ void Vehicle::DynamicsUpdate(double delta_t)
 	mPose.pos.x = str_circle_center.x + turning_radius * cos(turn_circ_new_theta);
 	mPose.pos.y = str_circle_center.y + turning_radius * sin(turn_circ_new_theta);
 	mPose.angle += mYawRate * delta_t;
+	if(mPose.angle > (2.0 * M_PI))
+		mPose.angle -= (2.0 * M_PI);
 	mVehicleDrawable.mPose = mPose;
 	mCurrentSpeed += mCurrentAccelRequested * delta_t;
 }

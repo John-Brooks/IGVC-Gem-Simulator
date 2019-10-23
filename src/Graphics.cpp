@@ -96,6 +96,10 @@ void Graphics::ConvertToScreenCoordinate(Line& line)
 	line.p2.x *= mWindowWidth / mEnvironmentWidth; 
 	line.p1.y *= mWindowHeight / mEnvironmentHeight;
 	line.p2.y *= mWindowHeight / mEnvironmentHeight;
+
+	//invert y-axis from pixel coordinates to regular cartesian.
+	line.p1.y = mWindowHeight - line.p1.y;
+	line.p2.y = mWindowHeight - line.p2.y;
 }
 
 void ApplyObjectAngleToPoint(Point& point, const Pose& pose)
