@@ -21,7 +21,13 @@ bool Scenario::ConvertFile(std::string path)
 	while (g)
 	{
 		const XMLAttribute* transform = g->FindAttribute("transform");
-		if (transform) UpdateTranslation(transform->Value());
+		if (transform) 
+			UpdateTranslation(transform->Value());
+		else
+		{
+			mXTranslation = 0;
+			mYTranslation = 0;
+		}
 
 		if (!ReadPaths(g))
 			return false;
