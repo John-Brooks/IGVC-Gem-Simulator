@@ -51,9 +51,10 @@ bool Graphics::Render()
 	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
 	SDL_RenderClear(mRenderer);
 
-	Line render_line;
 	for (auto& drawable : mDrawables)
 	{
+		if (drawable->mColor.a == 0)
+			continue;
 		SDL_SetRenderDrawColor(mRenderer, drawable->mColor.r, drawable->mColor.g, drawable->mColor.b, drawable->mColor.a);
 		for( auto& line : drawable->mLines)
 		{ 
@@ -62,7 +63,7 @@ bool Graphics::Render()
 				SDL_RenderDrawLine(mRenderer, line.p1.x, line.p1.y, line.p2.x, line.p2.y);
 				continue;
 			}
-			render_line = line;
+			Line render_line = line;
 			ApplyObjectPose(render_line, drawable->mPose);
 			ConvertToScreenCoordinate(render_line);
 			
@@ -102,28 +103,3 @@ void Graphics::ConvertToScreenCoordinate(Line& line)
 	line.p2.y = mWindowHeight - line.p2.y;
 }
 
-void ApplyObjectAngleToPoint(Point& point, const Pose& pose)
-{
-	double r, theta;
-
-	r = sqrt(pow(point.y, 2) + pow(point.x, 2));
-
-	theta = CalculatePointAngle(point);
-	theta += pose.angle;
-	point.x = r * cos(theta);
-	point.y = r * sin(theta);
-}
-
-void Graphics::ApplyObjectPose(Line& line, const Pose& pose)
-{
-	if (pose.angle != 0.0)
-	{
-		ApplyObjectAngleToPoint(line.p1, pose);
-		ApplyObjectAngleToPoint(line.p2, pose);
-	}
-
-	line.p1.x += pose.pos.x;
-	line.p1.y += pose.pos.y;
-	line.p2.x += pose.pos.x;
-	line.p2.y += pose.pos.y;
-}

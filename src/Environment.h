@@ -4,7 +4,7 @@
 #include "Graphics.h"
 #include "ActionSpace.h"
 #include "StateSpace.h"
-
+#include "Collision.h"
 class Scenario;
 
 
@@ -27,8 +27,10 @@ private:
 	std::vector< DrawableObject* > mRewardGates;
 
 	Graphics mGraphics;
+	Collision mCollision;
 
 	Vehicle mVehicle;
+	DrawableObject::Color mVehicleOriginalColor;
 
 	Scenario* mScenario;
 

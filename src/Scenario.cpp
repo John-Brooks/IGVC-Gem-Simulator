@@ -84,16 +84,17 @@ Line Scenario::ConvertDimensionToLine(const std::string& dimension)
 	std::string str_x2 = coordinates.substr(space+1, second_comma - space - 1);
 	std::string str_y2 = coordinates.substr(second_comma+1, coordinates.length() - second_comma -1);
 
-	Line line;
-	line.p1.x = std::stod(str_x1) + mXTranslation;
-	line.p1.y = std::stod(str_y1) + mYTranslation;
-	line.p2.x = line.p1.x + std::stod(str_x2);// +mXTranslation;
-	line.p2.y = line.p1.y + std::stod(str_y2);// +mYTranslation;
 
-	line.p1.y = mHeight - line.p1.y;
-	line.p2.y = mHeight - line.p2.y;
+	Point p1, p2;
+	p1.x = std::stod(str_x1) + mXTranslation;
+	p1.y = std::stod(str_y1) + mYTranslation;
+	p2.x = p1.x + std::stod(str_x2);// +mXTranslation;
+	p2.y = p1.y + std::stod(str_y2);// +mYTranslation;
 
-	return line;
+	p1.y = mHeight - p1.y;
+	p2.y = mHeight - p2.y;
+
+	return Line(p1,p2);
 }
 
 Scenario::RGBValue_t Scenario::GetStrokeColorFromStyle(const std::string& style)

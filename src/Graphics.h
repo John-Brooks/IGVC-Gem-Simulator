@@ -23,7 +23,6 @@ class Graphics {
 
     private:
 		void ConvertToScreenCoordinate(Line& line);
-		void ApplyObjectPose(Line& line, const Pose& pose);
 
 		SDL_Window* mWindow = NULL;
 		SDL_Renderer* mRenderer = NULL;

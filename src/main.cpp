@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 {
 	Scenario scen;
 
-	scen.ConvertFile("c:\\drawing.svg");
+	scen.ConvertFile("c:\\simple.svg");
 
 	Environment env;
 	ActionSpace action;

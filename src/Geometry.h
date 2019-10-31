@@ -13,8 +13,38 @@ struct Point {
 };
 struct Line{
 	Point p1, p2;
-	Line(Point p1, Point p2) : p1(p1), p2(p2) {}
-	Line(){}
+	Line(Point p1, Point p2) : p1(p1), p2(p2) {
+		UpdateMetaData();
+	}
+
+	void UpdateMetaData()
+	{
+		if (p2.x - p1.x != 0)
+		{
+			slope = (p2.y - p1.y) / (p2.x - p1.x);
+			vertical = false;
+		}
+		else
+		{
+			vertical = true;
+			slope = 0;
+		}
+
+		intercept = p2.y - (slope * p2.x);
+		if (p1.x < p2.x)
+		{
+			min_x = p1.x;
+			max_x = p2.x;
+		}
+		else
+		{
+			min_x = p2.x;
+			max_x = p1.x;
+		}
+	}
+	double slope, intercept;
+	double min_x, max_x;
+	bool vertical = false;
 };
 struct Circle
 {
@@ -104,6 +134,34 @@ static double CalculatePointAngle(const Point& point)
 		}
 	}
 	return theta;
+}
+
+static void ApplyObjectAngleToPoint(Point& point, const Pose& pose)
+{
+	double r, theta;
+
+	r = sqrt(pow(point.y, 2) + pow(point.x, 2));
+
+	theta = CalculatePointAngle(point);
+	theta += pose.angle;
+	point.x = r * cos(theta);
+	point.y = r * sin(theta);
+}
+
+static void ApplyObjectPose(Line & line, const Pose & pose)
+{
+	if (pose.angle != 0.0)
+	{
+		ApplyObjectAngleToPoint(line.p1, pose);
+		ApplyObjectAngleToPoint(line.p2, pose);
+	}
+
+	line.p1.x += pose.pos.x;
+	line.p1.y += pose.pos.y;
+	line.p2.x += pose.pos.x;
+	line.p2.y += pose.pos.y;
+
+	line.UpdateMetaData();
 }
 
 
