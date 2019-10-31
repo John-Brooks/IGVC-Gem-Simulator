@@ -26,8 +26,14 @@ Vehicle::Vehicle()
 	mSafetyLightsOn = false;
 	mSafetyLightFlash = false;
 
-	mVehicleDrawable = DrawableObject(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
+	//call the base class constructor to create our geometry
+	this->DrawableObject::DrawableObject(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
+	InitPoseTransformedDrawable();
+}
 
+void Vehicle::ProcessSimulationTimeStep(double time_step)
+{
+	DynamicsUpdate(time_step);
 }
 
 void Vehicle::SetSteeringAngle(double new_angle)
@@ -52,7 +58,8 @@ void Vehicle::DynamicsUpdate(double delta_t)
 		mPose.pos.x += s * cos(mPose.angle);
 		mPose.pos.y += s * sin(mPose.angle);
 
-		mVehicleDrawable.mPose = mPose;
+		mPoseTransformedDrawable->mPose = mPose;
+		UpdatePoseTransformedDrawable();
 		mCurrentSpeed += mCurrentAccelRequested * delta_t;
 		return;
 	}
@@ -88,7 +95,8 @@ void Vehicle::DynamicsUpdate(double delta_t)
 	mPose.angle += mYawRate * delta_t;
 	if(mPose.angle > (2.0 * M_PI))
 		mPose.angle -= (2.0 * M_PI);
-	mVehicleDrawable.mPose = mPose;
+	mPoseTransformedDrawable->mPose = mPose;
+	UpdatePoseTransformedDrawable();
 	mCurrentSpeed += mCurrentAccelRequested * delta_t;
 }
 

@@ -3,7 +3,11 @@
 
 using namespace tinyxml2;
 
-
+//RGB
+#define LANE_LINE_COLOR 0xFF0000
+#define REWARD_GATE_COLOR 0x00FF00
+#define END_ZONE_COLOR 0x00FF00
+#define START_LOCATION_COLOR 0x00FF00
 
 bool Scenario::ConvertFile(std::string path)
 {
@@ -140,7 +144,7 @@ Scenario::RGBValue_t Scenario::GetFillColorFromStyle(const std::string& style)
 	return val;
 }
 
-bool Scenario::ConvertPathToLineDrawable(XMLElement* path, DrawableObject& object)
+bool Scenario::ConvertPathToLineDrawable(XMLElement* path, ScenarioObject& object)
 {
 	const XMLAttribute* d = path->FindAttribute("d");
 	if (!d)
@@ -153,7 +157,7 @@ bool Scenario::ConvertPathToLineDrawable(XMLElement* path, DrawableObject& objec
 		return false;
 
 	Line line = ConvertDimensionToLine(d->Value());
-	object = DrawableObject(line);
+	object = ScenarioObject(line);
 
 	const XMLAttribute* style = path->FindAttribute("style");
 	if (style)
@@ -205,7 +209,7 @@ bool Scenario::ReadPaths(XMLElement* parent)
 	XMLElement* path = parent->FirstChildElement("path");
 	for(XMLElement* path = parent->FirstChildElement("path"); path != nullptr; path = path->NextSiblingElement("path"))
 	{
-		DrawableObject object;
+		ScenarioObject object;
 			
 		if (PathIsStartLocationMarker(path))
 		{
@@ -215,13 +219,13 @@ bool Scenario::ReadPaths(XMLElement* parent)
 		}
 
 		ConvertPathToLineDrawable(path, object);
-		mBoundaries.push_back(object);
+		ImportToScenarioObjects(object, VectorShape::Line);
 	}
 	return true;
 }
 
 
-bool Scenario::ConvertRectToDrawable(XMLElement* xml_rect, DrawableObject& object)
+bool Scenario::ConvertRectToDrawable(XMLElement* xml_rect, ScenarioObject& object)
 {
 	const XMLAttribute* x = xml_rect->FindAttribute("x");
 	const XMLAttribute* y = xml_rect->FindAttribute("y");
@@ -237,7 +241,7 @@ bool Scenario::ConvertRectToDrawable(XMLElement* xml_rect, DrawableObject& objec
 	bottom_right.x = x->DoubleValue() + (width->DoubleValue()) + mXTranslation;
 	bottom_right.y = mHeight - (y->DoubleValue() + (height->DoubleValue()) + mYTranslation);
 
-	object = DrawableObject(Rect(top_left, bottom_right));
+	object = ScenarioObject(Rect(top_left, bottom_right));
 
 	const XMLAttribute* style = xml_rect->FindAttribute("style");
 	if (style)
@@ -255,11 +259,72 @@ bool Scenario::ReadRects(XMLElement* parent)
 	XMLElement* rect = parent->FirstChildElement("rect");
 	while (rect)
 	{
-		DrawableObject object;
+		ScenarioObject object;
 		ConvertRectToDrawable(rect, object);
-		mBoundaries.push_back(object);
-	
+		ImportToScenarioObjects(object, VectorShape::Rectangle);
 		rect = rect->NextSiblingElement("rect");
 	}
+	return true;
+}
+
+ObjectType Scenario::GetTypeFromShapeAndColor(VectorShape shape, uint32_t color)
+{
+	switch (shape)
+	{
+		case VectorShape::Line:
+			switch (color)
+			{
+				case LANE_LINE_COLOR:
+					return ObjectType::LaneLine;
+
+				case REWARD_GATE_COLOR:
+					return ObjectType::RewardGate;
+
+				default:
+					//If we don't have a matching color we will add it as an unknown object.
+					return ObjectType::Unknown;
+			}
+			
+		case VectorShape::Rectangle:
+			switch (color)
+			{
+				case END_ZONE_COLOR:
+					return ObjectType::EndZone;
+
+				default:
+					return ObjectType::Unknown;
+			}	
+
+		case VectorShape::Circle:
+			return ObjectType::Unknown;
+
+		default:
+			return ObjectType::Unknown;
+	}
+}
+
+bool Scenario::ImportToScenarioObjects(const ScenarioObject& object, VectorShape shape)
+{
+	uint32_t color = 0;
+	color |= object.mColor.r << 16;
+	color |= object.mColor.g << 8;
+	color |= object.mColor.b;
+
+	ObjectType type = GetTypeFromShapeAndColor(shape, color);
+
+	//Actually create the derived object type. When these objects have their own implementations
+	//they should be instantiated here.
+	switch (type)
+	{
+		case ObjectType::LaneLine:
+		case ObjectType::RewardGate:
+		case ObjectType::Unknown:
+			mObjects.push_back(std::make_shared<ScenarioObject>(object));
+			break;
+		default:
+			return false;
+	}
+
+	mObjects.back()->mType = type;
 	return true;
 }

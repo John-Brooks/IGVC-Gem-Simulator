@@ -5,8 +5,9 @@
 #include "ActionSpace.h"
 #include "StateSpace.h"
 #include "Collision.h"
+#include <vector>
+#include <map>
 class Scenario;
-
 
 class Environment {
 public:
@@ -16,20 +17,12 @@ public:
 	double GetReward();
 
 	void SetSimulationTimeStep(double time_step) { mSimulationTimeStep = time_step; }
-
-
 	
-
 private:
-	
-	std::vector< DrawableObject* > mRoadLines;
-	std::vector< DrawableObject* > mObstacles;
-	std::vector< DrawableObject* > mRewardGates;
-
 	Graphics mGraphics;
 	Collision mCollision;
 
-	Vehicle mVehicle;
+	std::shared_ptr<Vehicle> mVehicle = std::make_shared<Vehicle>();
 	DrawableObject::Color mVehicleOriginalColor;
 
 	Scenario* mScenario;

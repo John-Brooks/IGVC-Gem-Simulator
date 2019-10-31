@@ -42,8 +42,10 @@ struct Line{
 			max_x = p1.x;
 		}
 	}
-	double slope, intercept;
-	double min_x, max_x;
+	double slope = 0;
+	double intercept = 0;
+	double min_x = 0;
+	double max_x = 0;
 	bool vertical = false;
 };
 struct Circle
@@ -75,6 +77,8 @@ struct Pose
 	Point pos;
 	double angle;
 };
+
+
 
 class DrawableObject
 {

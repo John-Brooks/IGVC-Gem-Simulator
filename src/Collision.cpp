@@ -15,7 +15,7 @@ bool CheckVerticalLine(const Line& vert, const Line& reg)
 	return y_intercept < vert_max_y&& y_intercept > vert_min_y;
 }
 
-bool ObjectsCollide(const DrawableObject* object1, const DrawableObject* object2)
+bool ObjectsCollide(std::shared_ptr<const DrawableObject> object1, std::shared_ptr<const DrawableObject> object2)
 {
 	double x_intercept;
 	for (const auto& l1 : object1->mLines)
@@ -64,37 +64,31 @@ std::vector< CollisionDetection > Collision::GetObjectCollisions()
 {
 	std::vector< CollisionDetection > ret;
 
-	for (auto p_collidable : mObjects)
+	for (const auto collidable : mSimulationObjects)
 	{
-		DrawableObject collidable = *p_collidable;
 		CollisionDetection detection;
 
-		for (auto& line : collidable.mLines)
+		for (const auto& obj : mSimulationObjects)
 		{
-			ApplyObjectPose(line, collidable.mPose);
-		}
-
-		for (const auto& obj : mObjects)
-		{
-			if (p_collidable == obj)
+			if (collidable == obj)
 				continue;
-			if (ObjectsCollide(&collidable, obj))
+			if (ObjectsCollide(collidable->mPoseTransformedDrawable, obj->mPoseTransformedDrawable))
 			{
-				detection.object = p_collidable;
-				detection.collidided_objs[detection.num_collisions++] = obj;
+				detection.object = collidable;
+				detection.collidided_objs.push_back(obj);
 			}
 		}
 
-		for (const auto& obj : mEnvironment)
+		for (const auto& obj : mEnvironmentObjects)
 		{
-			if (ObjectsCollide(&collidable, obj))
+			if (ObjectsCollide(collidable->mPoseTransformedDrawable, obj))
 			{
-				detection.object = p_collidable;
-				detection.collidided_objs[detection.num_collisions++] = obj;
+				detection.object = collidable;
+				detection.collidided_objs.push_back(obj);
 			}
 		}
 
-		if (detection.num_collisions > 0)
+		if (detection.collidided_objs.size() > 0)
 			ret.push_back(detection);
 	}
 

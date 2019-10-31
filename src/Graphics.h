@@ -1,7 +1,7 @@
 #pragma once
 #include "SDL.h"
-
 #include <vector>
+#include <memory>
 #include "Geometry.h"
 
 class DrawableObject;
@@ -14,8 +14,8 @@ class Graphics {
 		void Close();
         bool Render();
 
-		void AddDrawableObject(const DrawableObject* obj);
-		void RemoveDrawableObject(const DrawableObject* obj);
+		void AddDrawableObject(std::shared_ptr< const DrawableObject> obj);
+		void RemoveDrawableObject(std::shared_ptr< const DrawableObject> obj);
 		void ClearDrawableObjects();
 		
 		void SetEnvironmentWidth(double new_width) { mEnvironmentWidth = new_width; }
@@ -28,7 +28,7 @@ class Graphics {
 		SDL_Renderer* mRenderer = NULL;
 		SDL_Surface* mScreenSurface = NULL;
 
-		std::vector< const DrawableObject* > mDrawables;
+		std::vector< std::shared_ptr< const DrawableObject> > mDrawables;
 
 		int mWindowWidth;
 		int mWindowHeight;

@@ -64,7 +64,6 @@ bool Graphics::Render()
 				continue;
 			}
 			Line render_line = line;
-			ApplyObjectPose(render_line, drawable->mPose);
 			ConvertToScreenCoordinate(render_line);
 			
 			SDL_RenderDrawLine(mRenderer, render_line.p1.x, render_line.p1.y, render_line.p2.x, render_line.p2.y);
@@ -74,11 +73,11 @@ bool Graphics::Render()
 	return true;
 }
 
-void Graphics::AddDrawableObject(const DrawableObject* obj) 
+void Graphics::AddDrawableObject(std::shared_ptr< const DrawableObject> obj)
 { 
 	mDrawables.push_back(obj); 
 }
-void Graphics::RemoveDrawableObject(const DrawableObject* obj)
+void Graphics::RemoveDrawableObject(std::shared_ptr< const DrawableObject> obj)
 {
 	auto iterator = std::find(mDrawables.begin(), mDrawables.end(), obj);
 	if (iterator != mDrawables.end())

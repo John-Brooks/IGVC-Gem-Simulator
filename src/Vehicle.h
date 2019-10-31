@@ -1,12 +1,15 @@
 #pragma once
 #include "Geometry.h"
+#include "SimulationObject.h"
 
-class Vehicle {
+class Vehicle : public SimulationObject
+{
 public:
 	Vehicle();
+	void ProcessSimulationTimeStep(double time_step);
 	void Start();
 	void DynamicsUpdate(double delta_t);
-	void SetPose(const Pose& new_pose) { mPose = new_pose; mVehicleDrawable.mPose = new_pose; }
+	void SetPose(const Pose& new_pose) { mPose = new_pose; mPoseTransformedDrawable->mPose = new_pose; }
 	Pose GetPose() { return mPose; }
 	void SetBrake(bool brake_on) { mBrakeApplied = brake_on; }
 	void SetAccelRequested(double new_accel);
@@ -17,14 +20,11 @@ public:
 	void SetCurrentSpeed(const double& new_speed) { mCurrentSpeed = new_speed; }
 	double GetCurrentSteeringAngle() { return mCurrentSteeringAngle; }
 
-	DrawableObject* GetVehicleDrawable() { return &mVehicleDrawable; }
-
 protected:
 	//Simulation
 	unsigned long long mLastUpdateTimeMs;
 
 	//Positioning
-	Pose mPose;
 	double mWidth;
 	double mLength;
 
@@ -47,6 +47,4 @@ protected:
 	//Misc
 	bool mSafetyLightsOn;
 	bool mSafetyLightFlash;
-	DrawableObject mVehicleDrawable;
-
 };
