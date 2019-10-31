@@ -4,4 +4,5 @@ struct ActionSpace
 {
 	double VehicleSpeed;
 	double SteeringAngle;
+	bool VehicleStopped = false;
 };

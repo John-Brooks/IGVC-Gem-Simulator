@@ -30,6 +30,8 @@ public:
 		mEnvironmentObjects.push_back(object);
 	}
 
+	void RemoveEnvironmentObject(std::shared_ptr< ScenarioObject > object);
+
 	void Clear() {
 		mSimulationObjects.clear();
 		mEnvironmentObjects.clear();
@@ -38,7 +40,6 @@ public:
 	std::vector< CollisionDetection > GetObjectCollisions();
 
 private:
-	int mLastObjectID;
 	std::vector< std::shared_ptr< SimulationObject > > mSimulationObjects;
 	std::vector< std::shared_ptr< ScenarioObject > > mEnvironmentObjects;
 

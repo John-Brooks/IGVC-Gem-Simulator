@@ -6,8 +6,8 @@ class Vehicle : public SimulationObject
 {
 public:
 	Vehicle();
+	void Reset();
 	void ProcessSimulationTimeStep(double time_step);
-	void Start();
 	void DynamicsUpdate(double delta_t);
 	void SetPose(const Pose& new_pose) { mPose = new_pose; mPoseTransformedDrawable->mPose = new_pose; }
 	Pose GetPose() { return mPose; }

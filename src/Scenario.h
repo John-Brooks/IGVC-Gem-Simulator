@@ -1,6 +1,7 @@
 #pragma once
 #include "Geometry.h"
 #include "ScenarioObject.h"
+#include "EndZone.h"
 #include "tinyxml2.h"
 #include <string> 
 #include <memory>
@@ -13,7 +14,8 @@ public:
 	std::vector< std::shared_ptr< ScenarioObject > > mObjects;
 
 	Pose mStartingLocation;
-	ScenarioObject mEndZone;
+
+	std::shared_ptr< EndZone > mEndZone;
 
 	double mWidth, mHeight;
 

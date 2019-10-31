@@ -4,8 +4,8 @@
 #include <memory>
 #include "Geometry.h"
 
-class DrawableObject;
-class Rect;
+struct DrawableObject;
+struct Rect;
 
 class Graphics {
     public:

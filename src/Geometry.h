@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <stdint.h>
+#include <cmath>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846  /* pi */
@@ -78,11 +79,8 @@ struct Pose
 	double angle;
 };
 
-
-
-class DrawableObject
+struct DrawableObject
 {
-public:
 	DrawableObject()
 	{
 		mPixelCoordinates = false;
@@ -91,11 +89,24 @@ public:
 	{
 		mLines.push_back(line);
 		mPixelCoordinates = false;
+		mWidth = line.p1.x - line.p2.x;
+		if (mWidth < 0.0)
+			mWidth *= -1.0;
+
+		mHeight = line.p1.y - line.p2.y;
+		if (mHeight < 0.0)
+			mHeight *= -1.0;
+
+		mCenter.x = (line.p1.x + line.p2.x) / 2.0;
+		mCenter.y = (line.p1.y + line.p2.y) / 2.0;
 	}
 	DrawableObject(const Circle& circle)
 	{
 		mCircles.push_back(circle);
 		mPixelCoordinates = false;
+		mCenter.x = circle.x;
+		mCenter.y = circle.y;
+		mWidth = mHeight = circle.r;
 	}
 	DrawableObject(const Rect& rect)
 	{
@@ -104,9 +115,21 @@ public:
 		mLines.push_back(Line(rect.bottom_right, rect.bottom_left)); //bottom
 		mLines.push_back(Line(rect.bottom_left, rect.top_left)); //left
 		mPixelCoordinates = false;
+		mWidth = rect.top_right.x - rect.top_left.x;
+		mHeight = rect.top_left.y - rect.bottom_left.y;
+		mCenter.x = (rect.top_left.x + rect.top_right.x) / 2.0;
+		mCenter.y = (rect.top_left.y + rect.bottom_left.y) / 2.0;
+		if (mWidth < 0.0)
+			mWidth *= -1.0;
+
+		if (mHeight < 0.0)
+			mHeight *= -1.0;
 	}
 	std::vector< Line > mLines;
 	std::vector< Circle > mCircles;
+	double mWidth = 0;
+	double mHeight = 0;
+	Point mCenter;
 
 	struct Color
 	{
@@ -167,6 +190,12 @@ static void ApplyObjectPose(Line & line, const Pose & pose)
 
 	line.UpdateMetaData();
 }
+static double PointDistance(const Point& p1, const Point& p2)
+{
+	double x = p2.x - p1.x;
+	double y = p2.y - p1.y;
 
+	return sqrt(pow(x, 2) + pow(y, 2));
+}
 
 

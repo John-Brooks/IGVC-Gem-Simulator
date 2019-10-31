@@ -321,6 +321,10 @@ bool Scenario::ImportToScenarioObjects(const ScenarioObject& object, VectorShape
 		case ObjectType::Unknown:
 			mObjects.push_back(std::make_shared<ScenarioObject>(object));
 			break;
+		case ObjectType::EndZone:
+			mEndZone = std::make_shared<EndZone>(object);
+			mObjects.push_back(std::make_shared<ScenarioObject>(object));
+			break;
 		default:
 			return false;
 	}

@@ -1,6 +1,5 @@
 #include "Collision.h"
 
-
 bool CheckVerticalLine(const Line& vert, const Line& reg)
 {
 	//if the vertical line is outside the domain of the regular line
@@ -93,4 +92,15 @@ std::vector< CollisionDetection > Collision::GetObjectCollisions()
 	}
 
 	return ret;
+}
+
+void Collision::RemoveEnvironmentObject(std::shared_ptr< ScenarioObject > object)
+{
+	auto it = mEnvironmentObjects.begin();
+	while (*it != object && it != mEnvironmentObjects.end())
+		it++;
+	if (it != mEnvironmentObjects.end())
+	{
+		mEnvironmentObjects.erase(it);
+	}
 }

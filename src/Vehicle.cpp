@@ -4,31 +4,38 @@
 
 Vehicle::Vehicle()
 {
-	mLastUpdateTimeMs = 0;
+	mType = ObjectType::Vehicle;
 
 	// +/- 60 degrees 
 	mMinimumSteeringAngle = M_PI * (-60.0 / 180.0);
 	mMaximumSteeringAngle = M_PI * (60.0 / 180.0);
-	mCurrentSteeringAngle = 0;
+	
 	mYawRate = 0;
 	mWheelbase = 2;
 	mWidth = 1;
 	mLength = 2;
-
 	mMaximumAccel = 1;
 	mMinimumAccel = -1;
-	mCurrentAccelRequested = 0;
 	mMaximumSpeed = 5;
-	mCurrentSpeed = 0;
-	mBrakeApplied = false;
-	mReverse = false;
 
-	mSafetyLightsOn = false;
-	mSafetyLightFlash = false;
+	Reset();
 
 	//call the base class constructor to create our geometry
 	this->DrawableObject::DrawableObject(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
 	InitPoseTransformedDrawable();
+}
+
+void Vehicle::Reset()
+{
+	mLastUpdateTimeMs = 0;
+	mCurrentSteeringAngle = 0;
+	mCurrentAccelRequested = 0;
+	mCurrentSpeed = 0;
+	mBrakeApplied = false;
+	mReverse = false;
+	mYawRate = 0;
+	mSafetyLightsOn = false;
+	mSafetyLightFlash = false;
 }
 
 void Vehicle::ProcessSimulationTimeStep(double time_step)
@@ -108,5 +115,4 @@ void Vehicle::SetAccelRequested(double new_accel)
 		mCurrentAccelRequested = mMinimumAccel;
 	else
 		mCurrentAccelRequested = new_accel;
-
 }

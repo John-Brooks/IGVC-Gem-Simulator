@@ -36,18 +36,29 @@ bool Graphics::Init()
 }
 void Graphics::Close()
 {
+	//if the window is null, then we are not "open" so don't close.
+	if (mWindow == nullptr)
+		return;
+
+	ClearDrawableObjects();
+
 	//Destroy window
 	SDL_DestroyWindow(mWindow);
-	mWindow = NULL;
+	mWindow = nullptr;
 
 	SDL_DestroyRenderer(mRenderer);
-	mRenderer = NULL;
+	mRenderer = nullptr;
 
 	//Quit SDL subsystems
 	SDL_Quit();
 }
 bool Graphics::Render()
 {
+	if (mWindow == nullptr)
+	{
+		if (!Init())
+			return false;
+	}
 	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
 	SDL_RenderClear(mRenderer);
 
