@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.10.2)
 project( igvc-simulator )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_BUILD_TYPE Debug)
 
 if( WIN32 )
 	#There doesn't seem to be a clean way to find SDL on Windows since you can extract the libraries anywhere
