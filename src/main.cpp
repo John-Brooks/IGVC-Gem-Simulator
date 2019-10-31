@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 {
 	Scenario scen;
 
-	scen.ConvertFile("C:\\Users\\John\\Desktop\\drawing.svg");
+	scen.ConvertFile("/media/john/5A506552506535C3/Users/John/Desktop/drawing.svg");
 
 	Environment env;
 	ActionSpace action;

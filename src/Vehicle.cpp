@@ -21,7 +21,7 @@ Vehicle::Vehicle()
 	Reset();
 
 	//call the base class constructor to create our geometry
-	this->DrawableObject::DrawableObject(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
+	SetupFromRect(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
 	InitPoseTransformedDrawable();
 }
 

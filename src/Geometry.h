@@ -87,6 +87,12 @@ struct DrawableObject
 	}
 	DrawableObject(const Line& line)
 	{
+		SetupFromLine(line);
+	}
+	void SetupFromLine(const Line& line)
+	{
+		mLines.clear();
+		mCircles.clear();
 		mLines.push_back(line);
 		mPixelCoordinates = false;
 		mWidth = line.p1.x - line.p2.x;
@@ -102,6 +108,12 @@ struct DrawableObject
 	}
 	DrawableObject(const Circle& circle)
 	{
+		SetupFromCircle(circle);
+	}
+	void SetupFromCircle(const Circle& circle)
+	{
+		mLines.clear();
+		mCircles.clear();
 		mCircles.push_back(circle);
 		mPixelCoordinates = false;
 		mCenter.x = circle.x;
@@ -110,6 +122,12 @@ struct DrawableObject
 	}
 	DrawableObject(const Rect& rect)
 	{
+		SetupFromRect(rect);
+	}
+	void SetupFromRect(const Rect& rect)
+	{
+		mLines.clear();
+		mCircles.clear();
 		mLines.push_back(Line(rect.top_left, rect.top_right)); //top
 		mLines.push_back(Line(rect.top_right, rect.bottom_right)); //right
 		mLines.push_back(Line(rect.bottom_right, rect.bottom_left)); //bottom

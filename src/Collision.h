@@ -1,6 +1,6 @@
 #pragma once
 
-#include "geometry.h"
+#include "Geometry.h"
 #include "SimulationObject.h"
 #include "ScenarioObject.h"
 #include <map>

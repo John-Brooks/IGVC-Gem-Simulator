@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.10.2)
 project( igvc-simulator )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
@@ -20,6 +20,7 @@ add_executable( igvc-simulator
 	src/Environment.cpp
 	src/Scenario.cpp
 	src/tinyxml2.cpp
+	src/EndZone.cpp
 )
 
 target_link_libraries( igvc-simulator ${SDL2_LIBRARY} )
