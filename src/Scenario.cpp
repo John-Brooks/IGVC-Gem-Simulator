@@ -11,6 +11,10 @@ using namespace tinyxml2;
 
 bool Scenario::ConvertFile(std::string path)
 {
+	mObjects.clear();
+	mStartingLocation = Pose();
+	mEndZone = nullptr;
+	
 	XMLDocument doc;
 	doc.LoadFile(path.c_str());
 

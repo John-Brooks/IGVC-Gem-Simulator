@@ -54,6 +54,15 @@ void Graphics::Close()
 }
 bool Graphics::Render()
 {
+	SDL_Event e;
+	while( SDL_PollEvent( &e ) != 0 ) { 
+		switch(e.type)
+        {
+        	case SDL_QUIT:
+				return false;
+		}
+	}
+	
 	if (mWindow == nullptr)
 	{
 		if (!Init())

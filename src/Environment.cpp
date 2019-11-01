@@ -3,47 +3,56 @@
 #include "Collision.h"
 #include "EndZone.h"
 
-void Environment::LoadScenario(Scenario* scenario)
+bool Environment::LoadScenario(const char* filepath)
 {
+	mScenario.ConvertFile(filepath);
+	
 	mCollision.Clear();
 	mGraphics.Close();
 
-	mScenario = scenario;
-	Pose vehicle_pose;
-	vehicle_pose = scenario->mStartingLocation;
-	mVehicle->SetPose(vehicle_pose);
+	mVehicle->SetPose(mScenario.mStartingLocation);
 	mVehicleOriginalColor = mVehicle->mColor;
 	
-	if (mScenario->mWidth / mScenario->mHeight > 1920.0 / 1080.0)
+	if (mScenario.mWidth / mScenario.mHeight > mWindowWidth / mWindowHeight)
 	{
 		//Wider than our current aspect ratio
-		mGraphics.SetEnvironmentHeight(mScenario->mWidth * (1080.0 / 1920.0));
-		mGraphics.SetEnvironmentWidth(mScenario->mWidth);
+		mGraphics.SetEnvironmentHeight(mScenario.mWidth * (mWindowHeight / mWindowWidth));
+		mGraphics.SetEnvironmentWidth(mScenario.mWidth);
 	}
 	else
 	{
-		mGraphics.SetEnvironmentHeight(mScenario->mHeight);
-		mGraphics.SetEnvironmentWidth(mScenario->mHeight * (1920.0 / 1080.0));
+		mGraphics.SetEnvironmentHeight(mScenario.mHeight);
+		mGraphics.SetEnvironmentWidth(mScenario.mHeight * (mWindowWidth / mWindowHeight));
 	}
 
-	mGraphics.SetWindowSize(1920, 1080);
+	mGraphics.SetWindowSize(mWindowWidth, mWindowHeight);
 	mGraphics.Init();
 
 	mGraphics.AddDrawableObject(mVehicle->mPoseTransformedDrawable);
 	mCollision.AddSimulationObject(mVehicle);
 
-	for (auto& obj : mScenario->mObjects)
+	for (auto& obj : mScenario.mObjects)
 	{
 		mGraphics.AddDrawableObject(obj);
 		mCollision.AddEnvironmentObject(obj);
 	}
+}
+void Environment::Close()
+{
+	mGraphics.Close();
+}
+
+void Environment::SetWindowSize(int width, int height)
+{
+	mWindowWidth = width;
+	mWindowHeight = height;
 }
 
 void Environment::Reset()
 {
 	mStateSpace = StateSpace();
 	mVehicle->Reset();
-	mVehicle->SetPose(mScenario->mStartingLocation);
+	mVehicle->SetPose(mScenario.mStartingLocation);
 	mVehicleOriginalColor = mVehicle->mColor;
 
 	mCollision.Clear();
@@ -52,16 +61,16 @@ void Environment::Reset()
 	mGraphics.AddDrawableObject(mVehicle->mPoseTransformedDrawable);
 	mCollision.AddSimulationObject(mVehicle);
 
-	for (auto& obj : mScenario->mObjects)
+	for (auto& obj : mScenario.mObjects)
 	{
 		mGraphics.AddDrawableObject(obj);
 		mCollision.AddEnvironmentObject(obj);
 	}
 }
 
-void Environment::Render()
+bool Environment::Render()
 {
-	mGraphics.Render();
+	return mGraphics.Render();
 }
 
 void Environment::CheckCollisions()
@@ -115,8 +124,8 @@ StateSpace Environment::Step(const ActionSpace& action)
 
 	CheckCollisions();
 
-	if (mScenario->mEndZone)
-		mStateSpace.reward += mScenario->mEndZone->GetPositionBasedReward(mVehicle->mPoseTransformedDrawable->mPose, action.VehicleStopped);
+	if (mScenario.mEndZone)
+		mStateSpace.reward += mScenario.mEndZone->GetPositionBasedReward(mVehicle->mPoseTransformedDrawable->mPose, action.VehicleStopped);
 	
 	if (mStateSpace.reward != 0)
 		printf("Reward: %0.1f\n", mStateSpace.reward);

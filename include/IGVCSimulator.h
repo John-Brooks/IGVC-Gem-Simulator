@@ -1,3 +1,5 @@
+#pragma once
+#include <stdio.h>
 #include "Graphics.h"
 #include "Environment.h"
 #include "ActionSpace.h"
@@ -6,9 +8,9 @@
 #include <thread>
 #include "Scenario.h"
 
-static Graphics graphics;
+extern "C" void HelloWorld() { printf("Hello World!\n"); }
 
-int main(int argc, char** argv)
+void run()
 {
 	Environment env;
 	ActionSpace action;
@@ -29,7 +31,7 @@ int main(int argc, char** argv)
 		if(!env.Render())
 		{
 			env.Close();
-			return 0;
+			return;
 		}
 
 		if (state.test_ended)
@@ -37,5 +39,9 @@ int main(int argc, char** argv)
 		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 	}
 	env.Close();
-	return 0;
+}
+
+StateSpace Step(ActionSpace action)
+{
+
 }
