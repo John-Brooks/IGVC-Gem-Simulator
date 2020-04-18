@@ -3007,8 +3007,9 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Environment swig_types[1]
 #define SWIGTYPE_p_StateSpace swig_types[2]
 #define SWIGTYPE_p_char swig_types[3]
-static swig_type_info *swig_types[5];
-static swig_module_info swig_module = {swig_types, 4, 0, 0, 0, 0};
+#define SWIGTYPE_p_double swig_types[4]
+static swig_type_info *swig_types[6];
+static swig_module_info swig_module = {swig_types, 5, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3422,6 +3423,13 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
   return SWIG_OK;
 }
 
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_int  (int value)
+{
+  return PyInt_FromLong((long) value);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -3443,6 +3451,36 @@ SWIGINTERN PyObject *_wrap_run(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   if (!PyArg_ParseTuple(args,(char *)":run")) SWIG_fail;
   run();
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Step(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  ActionSpace arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  StateSpace result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Step",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_ActionSpace,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Step" "', argument " "1"" of type '" "ActionSpace""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Step" "', argument " "1"" of type '" "ActionSpace""'");
+    } else {
+      ActionSpace * temp = reinterpret_cast< ActionSpace * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = Step(arg1);
+  resultobj = SWIG_NewPointerObj((new StateSpace(static_cast< const StateSpace& >(result))), SWIGTYPE_p_StateSpace, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4156,6 +4194,65 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StateSpace_distances_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  StateSpace *arg1 = (StateSpace *) 0 ;
+  double *arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:StateSpace_distances_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_StateSpace, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StateSpace_distances_set" "', argument " "1"" of type '" "StateSpace *""'"); 
+  }
+  arg1 = reinterpret_cast< StateSpace * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "StateSpace_distances_set" "', argument " "2"" of type '" "double [12]""'"); 
+  } 
+  arg2 = reinterpret_cast< double * >(argp2);
+  {
+    if (arg2) {
+      size_t ii = 0;
+      for (; ii < (size_t)12; ++ii) *(double *)&arg1->distances[ii] = *((double *)arg2 + ii);
+    } else {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""distances""' of type '""double [12]""'");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StateSpace_distances_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  StateSpace *arg1 = (StateSpace *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StateSpace_distances_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_StateSpace, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StateSpace_distances_get" "', argument " "1"" of type '" "StateSpace *""'"); 
+  }
+  arg1 = reinterpret_cast< StateSpace * >(argp1);
+  result = (double *)(double *) ((arg1)->distances);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_double, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_StateSpace(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   StateSpace *result = 0 ;
@@ -4201,6 +4298,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"HelloWorld", _wrap_HelloWorld, METH_VARARGS, NULL},
 	 { (char *)"run", _wrap_run, METH_VARARGS, NULL},
+	 { (char *)"Step", _wrap_Step, METH_VARARGS, NULL},
 	 { (char *)"Environment_LoadScenario", _wrap_Environment_LoadScenario, METH_VARARGS, NULL},
 	 { (char *)"Environment_Step", _wrap_Environment_Step, METH_VARARGS, NULL},
 	 { (char *)"Environment_Render", _wrap_Environment_Render, METH_VARARGS, NULL},
@@ -4230,6 +4328,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StateSpace_test_ended_get", _wrap_StateSpace_test_ended_get, METH_VARARGS, NULL},
 	 { (char *)"StateSpace_reward_set", _wrap_StateSpace_reward_set, METH_VARARGS, NULL},
 	 { (char *)"StateSpace_reward_get", _wrap_StateSpace_reward_get, METH_VARARGS, NULL},
+	 { (char *)"StateSpace_distances_set", _wrap_StateSpace_distances_set, METH_VARARGS, NULL},
+	 { (char *)"StateSpace_distances_get", _wrap_StateSpace_distances_get, METH_VARARGS, NULL},
 	 { (char *)"new_StateSpace", _wrap_new_StateSpace, METH_VARARGS, NULL},
 	 { (char *)"delete_StateSpace", _wrap_delete_StateSpace, METH_VARARGS, NULL},
 	 { (char *)"StateSpace_swigregister", StateSpace_swigregister, METH_VARARGS, NULL},
@@ -4243,24 +4343,28 @@ static swig_type_info _swigt__p_ActionSpace = {"_p_ActionSpace", "ActionSpace *"
 static swig_type_info _swigt__p_Environment = {"_p_Environment", "Environment *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_StateSpace = {"_p_StateSpace", "StateSpace *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ActionSpace,
   &_swigt__p_Environment,
   &_swigt__p_StateSpace,
   &_swigt__p_char,
+  &_swigt__p_double,
 };
 
 static swig_cast_info _swigc__p_ActionSpace[] = {  {&_swigt__p_ActionSpace, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Environment[] = {  {&_swigt__p_Environment, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_StateSpace[] = {  {&_swigt__p_StateSpace, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ActionSpace,
   _swigc__p_Environment,
   _swigc__p_StateSpace,
   _swigc__p_char,
+  _swigc__p_double,
 };
 
 
@@ -4951,6 +5055,7 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
+  SWIG_Python_SetConstant(d, "NUM_SENSORS",SWIG_From_int(static_cast< int >(12)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

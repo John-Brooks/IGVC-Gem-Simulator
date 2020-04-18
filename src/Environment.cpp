@@ -26,16 +26,8 @@ bool Environment::LoadScenario(const char* filepath)
 	}
 
 	mGraphics.SetWindowSize(mWindowWidth, mWindowHeight);
-	mGraphics.Init();
 
-	mGraphics.AddDrawableObject(mVehicle->mPoseTransformedDrawable);
-	mCollision.AddSimulationObject(mVehicle);
-
-	for (auto& obj : mScenario.mObjects)
-	{
-		mGraphics.AddDrawableObject(obj);
-		mCollision.AddEnvironmentObject(obj);
-	}
+	Reset();
 }
 void Environment::Close()
 {
@@ -59,7 +51,16 @@ void Environment::Reset()
 	mGraphics.ClearDrawableObjects();
 
 	mGraphics.AddDrawableObject(mVehicle->mPoseTransformedDrawable);
+	for( auto& sensor : mVehicle->mDistanceSensors)
+	{
+		mGraphics.AddDrawableObject(sensor->mDrawable);
+	}
+
 	mCollision.AddSimulationObject(mVehicle);
+	for( auto& sensor : mVehicle->mDistanceSensors)
+	{
+		mCollision.AddSimulationObject(sensor);
+	}
 
 	for (auto& obj : mScenario.mObjects)
 	{
@@ -84,6 +85,10 @@ void Environment::CheckCollisions()
 			case ObjectType::Vehicle:
 				for (auto& object : collision.collidided_objs)
 					ProcessVehicleCollision(object);
+				break;
+			case ObjectType::VehicleDistanceSensor:
+				std::static_pointer_cast<DistanceSensor>(collision.object)->ProcessCollision(collision);
+				break;
 		}
 	}
 }
@@ -124,11 +129,15 @@ StateSpace Environment::Step(const ActionSpace& action)
 
 	CheckCollisions();
 
+	int i = 0;
+	for( const auto& sensor : mVehicle->mDistanceSensors)
+	{
+		mStateSpace.distances[i] = sensor->mDistance;
+		i++;
+	}
+
 	if (mScenario.mEndZone)
 		mStateSpace.reward += mScenario.mEndZone->GetPositionBasedReward(mVehicle->mPoseTransformedDrawable->mPose, action.VehicleStopped);
-	
-	if (mStateSpace.reward != 0)
-		printf("Reward: %0.1f\n", mStateSpace.reward);
 
 	mStateSpace.SteeringAngle = mVehicle->GetCurrentSteeringAngle();
 	mStateSpace.VehicleSpeed = mVehicle->GetCurrentSpeed();

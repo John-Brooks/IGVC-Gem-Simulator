@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblib-igvc-simulator.a  CMakeFiles/lib-igvc-simulator.dir/src/main.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/Vehicle.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/Collision.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/Graphics.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/Environment.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/Scenario.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/tinyxml2.cpp.o CMakeFiles/lib-igvc-simulator.dir/src/EndZone.cpp.o
+/usr/bin/ranlib liblib-igvc-simulator.a

@@ -103,6 +103,10 @@ HelloWorld = _IGVCSimulator.HelloWorld
 def run():
     return _IGVCSimulator.run()
 run = _IGVCSimulator.run
+
+def Step(action):
+    return _IGVCSimulator.Step(action)
+Step = _IGVCSimulator.Step
 class Environment(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Environment, name, value)
@@ -178,6 +182,7 @@ class ActionSpace(_object):
 ActionSpace_swigregister = _IGVCSimulator.ActionSpace_swigregister
 ActionSpace_swigregister(ActionSpace)
 
+NUM_SENSORS = _IGVCSimulator.NUM_SENSORS
 class StateSpace(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, StateSpace, name, value)
@@ -200,6 +205,10 @@ class StateSpace(_object):
     __swig_getmethods__["reward"] = _IGVCSimulator.StateSpace_reward_get
     if _newclass:
         reward = _swig_property(_IGVCSimulator.StateSpace_reward_get, _IGVCSimulator.StateSpace_reward_set)
+    __swig_setmethods__["distances"] = _IGVCSimulator.StateSpace_distances_set
+    __swig_getmethods__["distances"] = _IGVCSimulator.StateSpace_distances_get
+    if _newclass:
+        distances = _swig_property(_IGVCSimulator.StateSpace_distances_get, _IGVCSimulator.StateSpace_distances_set)
 
     def __init__(self):
         this = _IGVCSimulator.new_StateSpace()

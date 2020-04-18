@@ -3,7 +3,7 @@
 
 enum class ObjectType {
 	Vehicle,
-	VehiclePointSensor,
+	VehicleDistanceSensor,
 	RewardGate,
 	EndZone,
 	LaneLine,

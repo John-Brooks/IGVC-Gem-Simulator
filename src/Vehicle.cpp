@@ -1,6 +1,10 @@
 #include "Vehicle.h"
 #include "Geometry.h"
+#include "StateSpace.h"
 #include <cmath>
+
+
+#define SENSOR_LENGTH 10
 
 Vehicle::Vehicle()
 {
@@ -23,6 +27,18 @@ Vehicle::Vehicle()
 	//call the base class constructor to create our geometry
 	SetupFromRect(Rect(Point(0, mWidth / 2.0), Point(mLength, mWidth / -2.0)));
 	InitPoseTransformedDrawable();
+
+	Point sensor_end;
+	for(int i = 0; i < NUM_SENSORS; i++)
+	{
+		double angle = ((double)i / (double)NUM_SENSORS) * 2 * M_PI;
+		sensor_end.x = (SENSOR_LENGTH * cos(angle)) + mCenter.x;
+		sensor_end.y = (SENSOR_LENGTH * sin(angle)) + mCenter.y;
+		const Line line(mCenter, sensor_end);
+		mDistanceSensors.push_back( std::make_shared<DistanceSensor>(DistanceSensor(line)));
+		mDistanceSensors.back()->SetAngle(angle);
+		mDistanceSensors.back()->SetLength(SENSOR_LENGTH);
+	}
 }
 
 void Vehicle::Reset()
@@ -41,6 +57,15 @@ void Vehicle::Reset()
 void Vehicle::ProcessSimulationTimeStep(double time_step)
 {
 	DynamicsUpdate(time_step);
+
+	mPoseTransformedDrawable->mPose = mPose;
+	UpdatePoseTransformedDrawable();
+
+	for( auto& sensor : mDistanceSensors)
+	{
+		sensor->mPose = mPose;
+		sensor->ProcessSimulationTimeStep(time_step);
+	}
 }
 
 void Vehicle::SetSteeringAngle(double new_angle)
@@ -65,8 +90,7 @@ void Vehicle::DynamicsUpdate(double delta_t)
 		mPose.pos.x += s * cos(mPose.angle);
 		mPose.pos.y += s * sin(mPose.angle);
 
-		mPoseTransformedDrawable->mPose = mPose;
-		UpdatePoseTransformedDrawable();
+		
 		mCurrentSpeed += mCurrentAccelRequested * delta_t;
 		return;
 	}
@@ -102,8 +126,6 @@ void Vehicle::DynamicsUpdate(double delta_t)
 	mPose.angle += mYawRate * delta_t;
 	if(mPose.angle > (2.0 * M_PI))
 		mPose.angle -= (2.0 * M_PI);
-	mPoseTransformedDrawable->mPose = mPose;
-	UpdatePoseTransformedDrawable();
 	mCurrentSpeed += mCurrentAccelRequested * delta_t;
 }
 

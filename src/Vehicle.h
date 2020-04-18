@@ -1,6 +1,7 @@
 #pragma once
 #include "Geometry.h"
 #include "SimulationObject.h"
+#include "DistanceSensor.h"
 
 class Vehicle : public SimulationObject
 {
@@ -19,6 +20,8 @@ public:
 	double GetCurrentSpeed() { return mCurrentSpeed; }
 	void SetCurrentSpeed(const double& new_speed) { mCurrentSpeed = new_speed; }
 	double GetCurrentSteeringAngle() { return mCurrentSteeringAngle; }
+
+	std::vector< std::shared_ptr<DistanceSensor> > mDistanceSensors;
 
 protected:
 	//Simulation

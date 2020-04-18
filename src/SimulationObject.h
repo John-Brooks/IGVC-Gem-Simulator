@@ -5,7 +5,11 @@
 class SimulationObject : public ScenarioObject
 {
 public:
-	virtual void ProcessSimulationTimeStep(double time_step){};
+	using ScenarioObject::ScenarioObject;
+
+	virtual void ProcessSimulationTimeStep(double time_step){
+		UpdatePoseTransformedDrawable();
+	};
 
 	virtual void UpdatePoseTransformedDrawable() {
 		mPoseTransformedDrawable->mLines = mLines;

@@ -13,6 +13,7 @@ struct CollisionDetection
 {
 	std::shared_ptr< SimulationObject > object;
 	std::vector< std::shared_ptr< ScenarioObject > > collidided_objs;
+	std::vector< Point > collision_points;
 };
 
 class Collision

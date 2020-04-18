@@ -26,6 +26,7 @@ add_executable( IGVCSimulatorTest
 	src/Scenario.cpp
 	src/tinyxml2.cpp
 	src/EndZone.cpp
+	src/DistanceSensor.cpp
 )
 
 find_package(PythonLibs REQUIRED)
@@ -40,6 +41,7 @@ add_library( IGVCSimulator SHARED
 	src/Scenario.cpp
 	src/tinyxml2.cpp
 	src/EndZone.cpp
+	src/DistanceSensor.cpp
     swig/IGVCSimulator_wrap.cxx
 )
 
